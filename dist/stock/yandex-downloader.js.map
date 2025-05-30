@@ -1,0 +1,1 @@
+{"version":3,"file":"yandex-downloader.js","sourceRoot":"","sources":["../../src/stock/yandex-downloader.ts"],"names":[],"mappings":";;AAEA,wDAIC;AAND,iCAA0B;AAEnB,KAAK,UAAU,sBAAsB;IAC1C,MAAM,OAAO,GAAG,yCAAyC,CAAC;IAC1D,MAAM,QAAQ,GAAG,MAAM,eAAK,CAAC,GAAG,CAAC,OAAO,EAAE,EAAE,YAAY,EAAE,aAAa,EAAE,CAAC,CAAC;IAC3E,OAAO,MAAM,CAAC,IAAI,CAAC,QAAQ,CAAC,IAAI,CAAC,CAAC;AACpC,CAAC"}
