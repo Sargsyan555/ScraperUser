@@ -8,32 +8,33 @@ const istk_deutz_1 = require("./sites/istk-deutz");
 const camsparts_1 = require("./sites/camsparts");
 const imachinery_1 = require("./sites/imachinery");
 const pcagroup_1 = require("./sites/pcagroup");
+const recamgr_1 = require("./sites/recamgr");
 const voltag_1 = require("./sites/voltag");
 const shtren_1 = require("./sites/shtren");
 const scrapers = [
-    { name: "Seltex", fn: seltex_1.scrapeSeltex, exelova: true },
-    { name: "Voltag", fn: voltag_1.scrapeVoltag, exelova: true },
-    { name: "Shtren", fn: shtren_1.scrapeShtren, exelova: true },
-    { name: "74Parts", fn: _74parts_1.scrape74Parts, exelova: true },
-    { name: "istk-deutz", fn: istk_deutz_1.scrapeIstkDeutz, exelova: true },
-    { name: "Spb.camsparts", fn: camsparts_1.scrapeCamsParts, usePuppeteer: false },
-    { name: "Pcagroup", fn: pcagroup_1.scrapePcaGroup, usePuppeteer: false },
-    { name: "Imachinery", fn: imachinery_1.scrapeIMachinery, usePuppeteer: false },
-    { name: "Spb.camsparts", fn: camsparts_1.scrapeCamsParts, usePuppeteer: false },
+    { name: 'Seltex', fn: seltex_1.scrapeSeltex, exelova: true },
+    { name: 'Voltag', fn: voltag_1.scrapeVoltag, exelova: true },
+    { name: 'Shtren', fn: shtren_1.scrapeShtren, exelova: true },
+    { name: '74Parts', fn: _74parts_1.scrape74Parts, exelova: true },
+    { name: 'istk-deutz', fn: istk_deutz_1.scrapeIstkDeutz, exelova: true },
+    { name: 'Spb.camsparts', fn: camsparts_1.scrapeCamsParts, usePuppeteer: false },
+    { name: 'Pcagroup', fn: pcagroup_1.scrapePcaGroup, usePuppeteer: false },
+    { name: 'Imachinery', fn: imachinery_1.scrapeIMachinery, usePuppeteer: false },
+    { name: 'Recamgr', fn: recamgr_1.scrapeRecamgr, usePuppeteer: false },
 ];
 async function scrapeAllForText(productNames) {
     const puppeteerScrapers = scrapers.filter((s) => s.usePuppeteer &&
-        s.name !== "istk-deutz" &&
-        s.name !== "74Parts" &&
-        s.name !== "Shtren" &&
-        s.name !== "Seltex" &&
-        s.name !== "Voltag");
+        s.name !== 'istk-deutz' &&
+        s.name !== '74Parts' &&
+        s.name !== 'Shtren' &&
+        s.name !== 'Seltex' &&
+        s.name !== 'Voltag');
     const axiosScrapers = scrapers.filter((s) => !s.usePuppeteer &&
-        s.name !== "istk-deutz" &&
-        s.name !== "74Parts" &&
-        s.name !== "Shtren" &&
-        s.name !== "Seltex" &&
-        s.name !== "Voltag");
+        s.name !== 'istk-deutz' &&
+        s.name !== '74Parts' &&
+        s.name !== 'Shtren' &&
+        s.name !== 'Seltex' &&
+        s.name !== 'Voltag');
     const fromExcelScrapers = scrapers.filter((e) => e.exelova === true);
     const puppeteerResults = [];
     const axiosResults = [];
@@ -48,12 +49,11 @@ async function scrapeAllForText(productNames) {
             maxConcurrency: 4,
             puppeteerOptions: {
                 headless: true,
-                args: ["--no-sandbox", "--disable-setuid-sandbox"],
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
             },
         });
         await Promise.all(puppeteerScrapers.map(async (scraper) => {
             try {
-                console.log(`🚀 Running Puppeteer scraper: ${scraper.name}`);
                 const result = await cluster.execute(async ({ page }) => {
                     return scraper.fn([productNames.name], page);
                 });
@@ -70,7 +70,6 @@ async function scrapeAllForText(productNames) {
     const start = performance.now();
     await Promise.all(axiosScrapers.map(async (scraper) => {
         try {
-            console.log(`🔍 Running Axios scraper: ${scraper.name}`);
             const result = await scraper.fn([productNames.name]);
             axiosResults.push(...result);
         }
@@ -79,12 +78,12 @@ async function scrapeAllForText(productNames) {
             axiosResults.push({ shop: scraper.name, found: false });
         }
     }));
-    console.log("axios", start - performance.now());
     const allResults = [
         ...puppeteerResults,
         ...axiosResults,
         ...fromExcelResults,
     ];
+    console.log('==', allResults);
     return allResults;
 }
 //# sourceMappingURL=indexForText.js.map

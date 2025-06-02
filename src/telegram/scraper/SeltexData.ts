@@ -23,7 +23,7 @@ type ProductData = {
   articul?: string;
 };
 
-const productsByArticle: Record<string, ProductData> = {};
+const productsByArticle: Record<string, ProductData[]> = {};
 
 function loadExcelData() {
   const workbook = XLSX.readFile('src/telegram/scraper/SeltexPrice.xlsx');
@@ -32,26 +32,24 @@ function loadExcelData() {
   const sheetData: ExcelRow[] = XLSX.utils.sheet_to_json(worksheet);
 
   for (const row of sheetData) {
-    if (row['all numbers']) {
-      // Разбиваем по `/`, очищаем пробелы, удаляем пустые строки
-      const articles = String(row['all numbers'])
-        .split('/')
-        .map((a) => a.trim())
-        .filter((a) => a.length > 0);
+    if (row['articul']) {
+      const product: ProductData = {
+        name: row.name || '-',
+        price:
+          typeof row.price === 'string'
+            ? parseInt(row.price.replace(/[^\d]/g, ''), 10) || 0
+            : row.price || 0,
+        stock: row.stock || '-',
+        brand: row.brand || '-',
+        'stock msk': row['stock msk'] || '-',
+        'stock mpb': row['stock mpb'] || '-',
+        articul: row['articul'],
+      };
 
-      for (const key of articles) {
-        productsByArticle[key] = {
-          name: row.name || '-',
-          price:
-            typeof row.price === 'string'
-              ? parseInt(row.price.replace(/[^\d]/g, ''), 10) || 0
-              : row.price || 0,
-          stock: row.stock || '-',
-          brand: row.brand || '-',
-          'stock msk': row['stock msk'] || '-',
-          'stock mpb': row['stock mpb'] || '-',
-        };
+      if (!productsByArticle[row['articul']]) {
+        productsByArticle[row['articul']] = [];
       }
+      productsByArticle[row['articul']].push(product);
     }
   }
 }
@@ -59,9 +57,10 @@ function loadExcelData() {
 loadExcelData();
 console.log('Seltex Exel db is Done ');
 
-export function findProductBySeltex(article: string): ProductData | null {
+export function findProductsBySeltex(article: string): ProductData[] {
   const key = article.trim();
-  return productsByArticle[key] || null;
+
+  return productsByArticle[key] || [];
 }
 
 export { productsByArticle };

@@ -10,17 +10,26 @@ function scrapeSeltex(productNumbers) {
             shop: constants_1.SOURCE_WEBPAGE_KEYS.seltex,
             found: false,
         };
-        const product = (0, SeltexData_1.findProductBySeltex)(name);
-        if (product) {
-            result.found = true;
-            result.name = product.name || '-';
-            result.price = product.price || '-';
-            result.brand =
-                product.brand && product.brand?.length > 1
-                    ? product.brand
-                    : 'нет бренда';
+        const products = (0, SeltexData_1.findProductsBySeltex)(name);
+        for (const product of products) {
+            console.log('Seltex Nadasdnasn', product);
+            if (product.price) {
+                const result = {
+                    shop: constants_1.SOURCE_WEBPAGE_KEYS.seltex,
+                    found: true,
+                    name: product.articul || '-',
+                    price: product.price || '-',
+                    brand: product.brand && product.brand?.length > 1
+                        ? product.brand
+                        : 'нет бренда',
+                };
+                results.push(result);
+                console.log('Seltex Res Nadasdnasn', result);
+            }
         }
-        results.push(result);
+        if (!results.length) {
+            results.push(result);
+        }
     }
     return Promise.resolve(results);
 }

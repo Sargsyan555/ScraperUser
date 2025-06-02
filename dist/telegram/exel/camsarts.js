@@ -16,7 +16,6 @@ const XLSX = require("xlsx");
 let ScraperCamspartService = class ScraperCamspartService {
     sitemapUrl = 'https://spb.camsparts.ru/sitemap.xml';
     async scrapeAndExport() {
-        console.log(`Starting scraping from sitemap: ${this.sitemapUrl}`);
         const productUrls = await this.getProductUrlsFromSitemap(this.sitemapUrl);
         const filtered = productUrls.filter((url) => {
             if (!url.includes('katalog-cummins'))
@@ -27,19 +26,13 @@ let ScraperCamspartService = class ScraperCamspartService {
             const digitCount = (lastSegment.match(/\d/g) || []).length;
             return digitCount > 6;
         });
-        console.log(filtered);
         const products = [];
         let count = 0;
         for (const url of filtered) {
             count++;
-            console.log(count);
-            if (count > 100) {
-                break;
-            }
+            console.log(url, count);
             try {
-                console.log(`Scraping product page: ${url}`);
                 const product = await this.getProductData(url);
-                console.log(product);
                 if (product) {
                     products.push(product);
                 }
@@ -50,7 +43,6 @@ let ScraperCamspartService = class ScraperCamspartService {
         }
         const filePath = path.resolve(__dirname, '../products.xlsx');
         this.saveProductsToExcel(filePath, products);
-        console.log(`Excel file saved to ${filePath}`);
         return filePath;
     }
     async getProductUrlsFromSitemap(sitemapUrl) {
@@ -58,7 +50,6 @@ let ScraperCamspartService = class ScraperCamspartService {
         const xml = response.data;
         const parser = new xml2js.Parser();
         const result = await parser.parseStringPromise(xml);
-        console.log('steaxa', result);
         if (!result.urlset || !result.urlset.url) {
             throw new Error('Invalid sitemap structure');
         }
@@ -77,7 +68,6 @@ let ScraperCamspartService = class ScraperCamspartService {
         const price = $('.price__new [itemprop="price"]').text().trim();
         const brandMatch = title.match(/\b[A-ZА-Я]{3,}\b/);
         const brand = brandMatch ? brandMatch[0] : '';
-        console.log(title, articul, price, brand, url);
         return { title, articul, price, brand, url };
     }
     saveProductsToExcel(filePath, products) {
@@ -92,7 +82,6 @@ let ScraperCamspartService = class ScraperCamspartService {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
         XLSX.writeFile(workbook, filePath);
-        console.log(`Excel file saved to: ${filePath}`);
     }
 };
 exports.ScraperCamspartService = ScraperCamspartService;

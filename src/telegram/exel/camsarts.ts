@@ -19,8 +19,6 @@ export class ScraperCamspartService {
   private sitemapUrl = 'https://spb.camsparts.ru/sitemap.xml';
 
   async scrapeAndExport(): Promise<string> {
-    console.log(`Starting scraping from sitemap: ${this.sitemapUrl}`);
-
     // Step 1: Get all product URLs from sitemap
     const productUrls = await this.getProductUrlsFromSitemap(this.sitemapUrl);
     const filtered = productUrls.filter((url) => {
@@ -36,21 +34,16 @@ export class ScraperCamspartService {
 
       return digitCount > 6;
     });
-    console.log(filtered);
     const products: ProductData[] = [];
     let count = 0;
     // Step 2: Scrape each product page
     for (const url of filtered) {
       count++;
-      console.log(count);
 
-      if (count > 100) {
-        break;
-      }
+      console.log(url, count);
+
       try {
-        console.log(`Scraping product page: ${url}`);
         const product = await this.getProductData(url);
-        console.log(product);
         if (product) {
           products.push(product);
         }
@@ -63,7 +56,6 @@ export class ScraperCamspartService {
     const filePath = path.resolve(__dirname, '../products.xlsx');
     this.saveProductsToExcel(filePath, products);
 
-    console.log(`Excel file saved to ${filePath}`);
     return filePath;
   }
 
@@ -75,7 +67,6 @@ export class ScraperCamspartService {
 
     const parser = new xml2js.Parser();
     const result = await parser.parseStringPromise(xml);
-    console.log('steaxa', result);
 
     // Assuming sitemap structure: urlset > url[] > loc
     if (!result.urlset || !result.urlset.url) {
@@ -107,7 +98,6 @@ export class ScraperCamspartService {
     // Brand extraction (heuristic: first uppercase word >=3 letters in title)
     const brandMatch = title.match(/\b[A-ZА-Я]{3,}\b/);
     const brand = brandMatch ? brandMatch[0] : '';
-    console.log(title, articul, price, brand, url);
 
     return { title, articul, price, brand, url };
   }
@@ -126,6 +116,5 @@ export class ScraperCamspartService {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
 
     XLSX.writeFile(workbook, filePath);
-    console.log(`Excel file saved to: ${filePath}`);
   }
 }

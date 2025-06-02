@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsByArticle = void 0;
-exports.findProductByVoltag = findProductByVoltag;
+exports.findProductsByVoltag = findProductsByVoltag;
 const XLSX = require("xlsx");
 const productsByArticle = {};
 exports.productsByArticle = productsByArticle;
@@ -13,20 +13,25 @@ function loadExcelData() {
     for (const row of sheetData) {
         if (row.article) {
             const key = String(row.article).trim();
-            productsByArticle[key] = {
+            const product = {
+                Articul: key,
                 Name: row.name || '-',
                 Price: typeof row.price === 'string'
                     ? parseInt(row.price.replace(/[^\d]/g, ''), 10) || 0
                     : row.price || 0,
                 Brand: row.brand || '-',
             };
+            if (!productsByArticle[key]) {
+                productsByArticle[key] = [];
+            }
+            productsByArticle[key].push(product);
         }
     }
 }
 loadExcelData();
-console.log('Voltag Exel db is Done ');
-function findProductByVoltag(article) {
+console.log('Voltag Excel db is Done');
+function findProductsByVoltag(article) {
     const key = article.trim();
-    return productsByArticle[key] || null;
+    return productsByArticle[key] || [];
 }
 //# sourceMappingURL=VoltagData.js.map

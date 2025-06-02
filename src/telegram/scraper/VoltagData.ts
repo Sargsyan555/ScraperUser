@@ -14,7 +14,7 @@ type ProductData = {
   Brand?: string;
 };
 
-const productsByArticle: Record<string, ProductData> = {};
+const productsByArticle: Record<string, ProductData[]> = {};
 
 function loadExcelData() {
   const workbook = XLSX.readFile('src/telegram/scraper/voltag.xlsx');
@@ -25,7 +25,9 @@ function loadExcelData() {
   for (const row of sheetData) {
     if (row.article) {
       const key = String(row.article).trim();
-      productsByArticle[key] = {
+
+      const product: ProductData = {
+        Articul: key,
         Name: row.name || '-',
         Price:
           typeof row.price === 'string'
@@ -33,16 +35,22 @@ function loadExcelData() {
             : row.price || 0,
         Brand: row.brand || '-',
       };
+
+      if (!productsByArticle[key]) {
+        productsByArticle[key] = [];
+      }
+
+      productsByArticle[key].push(product);
     }
   }
 }
 
 loadExcelData();
-console.log('Voltag Exel db is Done ');
+console.log('Voltag Excel db is Done');
 
-export function findProductByVoltag(article: string): ProductData | null {
+export function findProductsByVoltag(article: string): ProductData[] {
   const key = article.trim();
-  return productsByArticle[key] || null;
+  return productsByArticle[key] || [];
 }
 
 export { productsByArticle };

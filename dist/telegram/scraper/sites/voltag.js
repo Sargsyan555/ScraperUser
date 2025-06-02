@@ -6,18 +6,25 @@ const VoltagData_1 = require("../VoltagData");
 function scrapeVoltag(productNumbers) {
     const results = [];
     for (const name of productNumbers) {
-        const result = {
-            shop: constants_1.SOURCE_WEBPAGE_KEYS.voltag,
-            found: false,
-        };
-        const product = (0, VoltagData_1.findProductByVoltag)(name);
-        if (product) {
-            result.found = true;
-            result.name = product.Name || '-';
-            result.price = product.Price || '-';
-            result.brand = product.Brand || 'нет бренда';
+        const products = (0, VoltagData_1.findProductsByVoltag)(name.trim());
+        if (products.length > 0) {
+            for (const product of products) {
+                const result = {
+                    shop: constants_1.SOURCE_WEBPAGE_KEYS.voltag,
+                    found: true,
+                    name: product.Name || '-',
+                    price: product.Price || '-',
+                    brand: product.Brand || 'нет бренда',
+                };
+                results.push(result);
+            }
         }
-        results.push(result);
+        else {
+            results.push({
+                shop: constants_1.SOURCE_WEBPAGE_KEYS.voltag,
+                found: false,
+            });
+        }
     }
     return Promise.resolve(results);
 }

@@ -109,7 +109,6 @@ export async function scrapeIMachinery(
     }
   });
 
-  console.log(res);
   console.log(
     `Search time for "${productNumbers[0]} in imachinery":`,
     performance.now() - start,

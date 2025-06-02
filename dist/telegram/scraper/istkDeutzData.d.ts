@@ -3,6 +3,6 @@ type ProductData = {
     price: number;
     stock: string | number;
 };
-declare const productsByArticul: Record<string, ProductData>;
-export declare function findProductByistkDeutz(articul: string): ProductData | null;
+declare const productsByArticul: Record<string, ProductData[]>;
+export declare function findProductsByistkDeutz(articul: string): ProductData[];
 export { productsByArticul };

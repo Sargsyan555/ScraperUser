@@ -6,19 +6,24 @@ const istkDeutzData_1 = require("../istkDeutzData");
 function scrapeIstkDeutz(productNumbers) {
     const results = [];
     for (const name of productNumbers) {
-        const result = {
-            shop: constants_1.SOURCE_WEBPAGE_KEYS.istk,
-            found: false,
-        };
-        const product = (0, istkDeutzData_1.findProductByistkDeutz)(name);
-        if (product) {
-            result.found = true;
-            result.name = product.title || '-';
-            result.price = product.price || '-';
-            result.brand =
-                (product.title && extractBrand(product.title)) || 'нет бренда';
+        const products = (0, istkDeutzData_1.findProductsByistkDeutz)(name);
+        if (products.length > 0) {
+            for (const product of products) {
+                results.push({
+                    shop: constants_1.SOURCE_WEBPAGE_KEYS.istk,
+                    found: true,
+                    name: product.title || '-',
+                    price: product.price || '-',
+                    brand: (product.title && extractBrand(product.title)) || 'нет бренда',
+                });
+            }
         }
-        results.push(result);
+        else {
+            results.push({
+                shop: constants_1.SOURCE_WEBPAGE_KEYS.istk,
+                found: false,
+            });
+        }
     }
     return Promise.resolve(results);
 }

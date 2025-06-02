@@ -4,6 +4,6 @@ type ProductData = {
     Price?: string | number;
     Brand?: string;
 };
-declare const productsByArticle: Record<string, ProductData>;
-export declare function findProductByVoltag(article: string): ProductData | null;
+declare const productsByArticle: Record<string, ProductData[]>;
+export declare function findProductsByVoltag(article: string): ProductData[];
 export { productsByArticle };

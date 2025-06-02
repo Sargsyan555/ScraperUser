@@ -1,7 +1,7 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { StockStorage } from './stock.storage';
-import { readExcelFromYandexDisk } from './readExcelFromYandexDisk';
-import { ParsedRow } from 'src/telegram/exel/exel.types';
+import { Injectable, OnModuleInit } from "@nestjs/common";
+import { StockStorage } from "./stock.storage";
+import { readExcelFromYandexDisk } from "./readExcelFromYandexDisk";
+import { ParsedRow } from "src/telegram/exel/exel.types";
 
 @Injectable()
 export class StockService implements OnModuleInit {
@@ -15,12 +15,11 @@ export class StockService implements OnModuleInit {
   async updateStock() {
     try {
       const skladItems = await readExcelFromYandexDisk(
-        'https://disk.yandex.ru/i/FE5LjEWujhR0Xg',
+        "https://disk.yandex.ru/i/FE5LjEWujhR0Xg"
       );
       this.stockStorage.setData(skladItems);
-    
     } catch (error) {
-      console.error('[StockService] Ошибка обновления склада:', error.message);
+      console.error("[StockService] Ошибка обновления склада:", error.message);
     }
   }
 
@@ -30,7 +29,9 @@ export class StockService implements OnModuleInit {
     if (data instanceof Error) {
       throw data; // или обработай
     }
-
+    if (data.length > 0) {
+      console.log("Sklad is done  🚀");
+    }
     return data;
   }
 }

@@ -34,21 +34,12 @@ const scrapers: {
   { name: 'Shtren', fn: scrapeShtren, exelova: true }, // + dandax 5000
   { name: '74Parts', fn: scrape74Parts, exelova: true }, // + dandax
   { name: 'istk-deutz', fn: scrapeIstkDeutz, exelova: true }, // + dandax // exelova
-  { name: 'Recamgr', fn: scrapeRecamgr, usePuppeteer: false }, // + fast
+  { name: 'Spb.camsparts', fn: scrapeCamsParts, usePuppeteer: false }, // + fast
   { name: 'Pcagroup', fn: scrapePcaGroup, usePuppeteer: false }, // + fast
-  {
-    name: 'Imachinery',
-    fn: scrapeIMachinery,
-    usePuppeteer: false,
-  }, //+ fast
-  {
-    name: 'Spb.camsparts',
-    fn: scrapeCamsParts,
-    usePuppeteer: false,
-  }, // + fast
-  // { name: 'Shtren', fn: scrapeShtren, usePuppeteer: false,exelova: true }, // + dandax 5000
+  { name: 'Imachinery', fn: scrapeIMachinery, usePuppeteer: false }, //+ fast
+  { name: 'Recamgr', fn: scrapeRecamgr, usePuppeteer: false }, // + fast
+  // + fast
   // { name: 'udtTechnika', fn: udtTechnika, usePuppeteer: false,exelova: true }, // +  dandax
-  // { name: '74Parts', fn: scrape74Parts, usePuppeteer: false,exelova: true }, // + dandax
   // { name: 'b2b.ixora-auto', fn: scrapeIxora, usePuppeteer: false,exelova: true }, // +
   // { name: 'Intertrek.info', fn: intertrek, usePuppeteer: false,exelova: true }, // + dandax
   // {
@@ -58,7 +49,7 @@ const scrapers: {
   // },
   // { name: 'Truckdrive', fn: scrapeTruckdrive, usePuppeteer: false,exelova: true }, // + dandax
   // { name: 'Impart', fn: scrapeImpart, usePuppeteer: false,exelova: true }, // + dandax
-  // { name: 'Truckmir', fn: scrapeTruckmir, usePuppeteer: false,exelova: true }, // shaaaaat dandaxa
+  // { name: 'Truckmir', fn: scrapeTruckmir, usePuppeteer: false, exelova: true }, // shaaaaat dandaxa
   // { name: 'Mirdiesel', fn: scrapeMirDiesel, usePuppeteer: false,exelova: true }, // posible server dont wokr
   // { name: 'Dv-Pt', fn: scrapeDvPt, usePuppeteer: false,exelova: true }, // + dandax
 ];
@@ -129,8 +120,9 @@ export async function scrapeAll(
   await Promise.all(
     axiosScrapers.map(async (scraper) => {
       try {
-        console.log(`🔍 Running Axios scraper: ${scraper.name}`);
+        // console.log(`🔍 Running Axios scraper: ${scraper.name}`);
         const result = await scraper.fn(productNames);
+
         axiosResults.push(...result);
       } catch (err: any) {
         console.error(`❌ Axios scraper failed: ${scraper.name}`, err.message);
@@ -138,13 +130,14 @@ export async function scrapeAll(
       }
     }),
   );
-  console.log('axios', start - performance.now());
 
   const allResults = [
     ...puppeteerResults,
     ...axiosResults,
     ...fromExcelResults,
   ];
+  console.log('==', fromExcelResults);
+
   return allResults;
   // const results = await Promise.all(scrapers.map((s) => s.fn(productNames)));
 

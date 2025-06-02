@@ -14,7 +14,7 @@ type ProductData = {
   availability?: string | number;
 };
 
-const productsByArticle: Record<string, ProductData> = {};
+const productsByArticle: Record<string, ProductData[]> = {};
 
 function loadExcelData() {
   const workbook = XLSX.readFile('src/telegram/scraper/74PartBase.xlsx');
@@ -25,7 +25,9 @@ function loadExcelData() {
   for (const row of sheetData) {
     if (row.article) {
       const key = String(row.article).trim();
-      productsByArticle[key] = {
+
+      const product: ProductData = {
+        article: key,
         title: row.title || '-',
         price:
           typeof row.price === 'string'
@@ -33,6 +35,12 @@ function loadExcelData() {
             : row.price || 0,
         availability: row.availability || '-',
       };
+
+      if (!productsByArticle[key]) {
+        productsByArticle[key] = [];
+      }
+
+      productsByArticle[key].push(product);
     }
   }
 }
@@ -40,9 +48,9 @@ function loadExcelData() {
 loadExcelData();
 console.log('74Part Exel db is Done ');
 
-export function findProductBy74Part(article: string): ProductData | null {
+export function findProductsBy74Part(article: string): ProductData[] {
   const key = article.trim();
-  return productsByArticle[key] || null;
+  return productsByArticle[key] || [];
 }
 
 export { productsByArticle };

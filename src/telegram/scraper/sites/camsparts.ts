@@ -90,7 +90,6 @@ export async function scrapeCamsParts(
         name,
       });
     } finally {
-      console.log(results);
 
       console.log(
         `Search time for "${productNumbers[0]} in camsparts":`,

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsByArticul = void 0;
-exports.findProductByistkDeutz = findProductByistkDeutz;
+exports.findProductsByistkDeutz = findProductsByistkDeutz;
 const XLSX = require("xlsx");
 const productsByArticul = {};
 exports.productsByArticul = productsByArticul;
@@ -13,20 +13,24 @@ function loadExcelData() {
     for (const row of sheetData) {
         if (row.articul) {
             const key = String(row.articul).trim();
-            productsByArticul[key] = {
+            const product = {
                 title: row.title || '-',
                 price: typeof row.price === 'string'
                     ? parseInt(row.price.replace(/[^\d]/g, ''), 10) || 0
                     : row.price || 0,
                 stock: row.stock || '-',
             };
+            if (!productsByArticul[key]) {
+                productsByArticul[key] = [];
+            }
+            productsByArticul[key].push(product);
         }
     }
 }
 loadExcelData();
 console.log('istd Exel db is Done ');
-function findProductByistkDeutz(articul) {
+function findProductsByistkDeutz(articul) {
     const key = articul.trim();
-    return productsByArticul[key] || null;
+    return productsByArticul[key] || [];
 }
 //# sourceMappingURL=istkDeutzData.js.map

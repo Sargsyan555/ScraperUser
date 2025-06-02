@@ -17,18 +17,10 @@ const scrapers = [
     { name: 'Shtren', fn: shtren_1.scrapeShtren, exelova: true },
     { name: '74Parts', fn: _74parts_1.scrape74Parts, exelova: true },
     { name: 'istk-deutz', fn: istk_deutz_1.scrapeIstkDeutz, exelova: true },
-    { name: 'Recamgr', fn: recamgr_1.scrapeRecamgr, usePuppeteer: false },
+    { name: 'Spb.camsparts', fn: camsparts_1.scrapeCamsParts, usePuppeteer: false },
     { name: 'Pcagroup', fn: pcagroup_1.scrapePcaGroup, usePuppeteer: false },
-    {
-        name: 'Imachinery',
-        fn: imachinery_1.scrapeIMachinery,
-        usePuppeteer: false,
-    },
-    {
-        name: 'Spb.camsparts',
-        fn: camsparts_1.scrapeCamsParts,
-        usePuppeteer: false,
-    },
+    { name: 'Imachinery', fn: imachinery_1.scrapeIMachinery, usePuppeteer: false },
+    { name: 'Recamgr', fn: recamgr_1.scrapeRecamgr, usePuppeteer: false },
 ];
 async function scrapeAll(productNames) {
     const puppeteerScrapers = scrapers.filter((s) => s.usePuppeteer &&
@@ -79,7 +71,6 @@ async function scrapeAll(productNames) {
     const start = performance.now();
     await Promise.all(axiosScrapers.map(async (scraper) => {
         try {
-            console.log(`🔍 Running Axios scraper: ${scraper.name}`);
             const result = await scraper.fn(productNames);
             axiosResults.push(...result);
         }
@@ -88,12 +79,12 @@ async function scrapeAll(productNames) {
             axiosResults.push({ shop: scraper.name, found: false });
         }
     }));
-    console.log('axios', start - performance.now());
     const allResults = [
         ...puppeteerResults,
         ...axiosResults,
         ...fromExcelResults,
     ];
+    console.log('==', fromExcelResults);
     return allResults;
 }
 //# sourceMappingURL=index.js.map

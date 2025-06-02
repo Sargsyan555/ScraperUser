@@ -1,37 +1,36 @@
 import { ScrapedProduct } from 'src/types/context.interface';
 import { SOURCE_WEBPAGE_KEYS } from 'src/constants/constants';
-import { findProductBy74Part } from '../74PartsData';
+import { findProductsBy74Part } from '../74PartsData';
 
 export function scrape74Parts(
   productNumbers: string[],
 ): Promise<ScrapedProduct[]> {
-  // Загружаем Excel-файл
-
   const results: ScrapedProduct[] = [];
 
   for (const name of productNumbers) {
-    const result: ScrapedProduct = {
-      shop: SOURCE_WEBPAGE_KEYS.parts74,
-      found: false,
-    };
+    const products = findProductsBy74Part(name);
 
-    // Ищем строку с артикулом в Excel (приводим к строке и обрезаем пробелы)
-    const product = findProductBy74Part(name);
-
-    if (product) {
-      result.found = true;
-      result.name = product.title || '-';
-      // Если цена в строке как строка, пробуем преобразовать в число
-      result.price = product.price || '-';
-      result.brand =
-        (product.title && extractBrand(product.title)) || 'нет бренда';
+    if (products.length > 0) {
+      for (const product of products) {
+        results.push({
+          shop: SOURCE_WEBPAGE_KEYS.parts74,
+          found: true,
+          name: product.title || '-',
+          price: product.price || '-',
+          brand: (product.title && extractBrand(product.title)) || 'нет бренда',
+        });
+      }
+    } else {
+      results.push({
+        shop: SOURCE_WEBPAGE_KEYS.parts74,
+        found: false,
+      });
     }
-
-    results.push(result);
   }
 
   return Promise.resolve(results);
 }
+
 function extractBrand(text: string): string {
   // Match all uppercase words (including commas and spaces between)
   const upperWords = text.match(/\b[A-Z0-9]+(?:\s+[A-Z0-9]+)*\b/g);

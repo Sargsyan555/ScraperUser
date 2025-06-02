@@ -22,13 +22,15 @@ import { ScraperImachineryService } from "./exel/imachinery";
 import { ScraperPcaGroupService } from "./exel/pcagroup";
 import { ScraperCamspartService } from "./exel/camsarts";
 import { CrawlerService } from "./exel/intertrek";
+import { SeltexService } from "./cache/seltex.service";
+import { ExcelCacheLoaderService } from "./cache/cache.service";
 
 @Module({
   imports: [
     StockModule,
     TelegrafModule.forRootAsync({
       useFactory: () => ({
-        token: "7720246807:AAEWSZ63-s2m8bhOIhlN2hsy6NkuWAkM6Dg",
+        token: "7080107656:AAEnyCl5SAt7EyvFSI-wR8z-V4bByx98VDg",
         middlewares: [session()],
       }),
     }),
@@ -54,6 +56,8 @@ import { CrawlerService } from "./exel/intertrek";
     ScraperPcaGroupService,
     ScraperCamspartService,
     CrawlerService,
+    SeltexService,
+    ExcelCacheLoaderService,
   ],
 })
 export class TelegramModule {}

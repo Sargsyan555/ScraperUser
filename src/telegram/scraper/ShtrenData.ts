@@ -14,7 +14,7 @@ type ProductData = {
   Brand?: string;
 };
 
-const productsByArticle: Record<string, ProductData> = {};
+const productsByArticle: Record<string, ProductData[]> = {};
 
 function loadExcelData() {
   const workbook = XLSX.readFile('src/telegram/scraper/shtren.xlsx');
@@ -25,7 +25,9 @@ function loadExcelData() {
   for (const row of sheetData) {
     if (row.Articul) {
       const key = String(row.Articul).trim();
-      productsByArticle[key] = {
+
+      const product: ProductData = {
+        Articul: key,
         Name: row.Name || '-',
         Price:
           typeof row.Price === 'string'
@@ -33,6 +35,11 @@ function loadExcelData() {
             : row.Price || 0,
         Brand: row.Brand || '-',
       };
+
+      if (!productsByArticle[key]) {
+        productsByArticle[key] = [];
+      }
+      productsByArticle[key].push(product);
     }
   }
 }
@@ -40,9 +47,9 @@ function loadExcelData() {
 loadExcelData();
 console.log('Shtren Exel db is Done ');
 
-export function findProductByShtren(article: string): ProductData | null {
+export function findProductsByShtren(article: string): ProductData[] {
   const key = article.trim();
-  return productsByArticle[key] || null;
+  return productsByArticle[key] || [];
 }
 
 export { productsByArticle };

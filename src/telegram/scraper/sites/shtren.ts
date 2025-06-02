@@ -1,31 +1,31 @@
 import { ScrapedProduct } from 'src/types/context.interface';
 import { SOURCE_WEBPAGE_KEYS } from 'src/constants/constants';
-import { findProductByShtren } from '../ShtrenData';
+import { findProductsByShtren } from '../ShtrenData';
 
 export function scrapeShtren(
   productNumbers: string[],
 ): Promise<ScrapedProduct[]> {
-  // Загружаем Excel-файл
-
   const results: ScrapedProduct[] = [];
 
   for (const name of productNumbers) {
-    const result: ScrapedProduct = {
-      shop: SOURCE_WEBPAGE_KEYS.shtern,
-      found: false,
-    };
+    const products = findProductsByShtren(name.trim());
 
-    // Ищем строку с артикулом в Excel (приводим к строке и обрезаем пробелы)
-    const product = findProductByShtren(name);
-
-    if (product) {
-      result.found = true;
-      result.name = product.Name || '-';
-      result.price = product.Price || '-';
-      result.brand = product.Brand || 'нет бренда';
+    if (products.length > 0) {
+      for (const product of products) {
+        results.push({
+          shop: SOURCE_WEBPAGE_KEYS.shtern,
+          found: true,
+          name: product.Name || '-',
+          price: product.Price || '-',
+          brand: product.Brand || 'нет бренда',
+        });
+      }
+    } else {
+      results.push({
+        shop: SOURCE_WEBPAGE_KEYS.shtern,
+        found: false,
+      });
     }
-
-    results.push(result);
   }
 
   return Promise.resolve(results);

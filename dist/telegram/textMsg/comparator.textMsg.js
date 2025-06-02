@@ -235,7 +235,7 @@ async function compareItemTextHandler(inputItem, skladItems) {
                 const foundDetails = foundPrices
                     .map((p) => ` 🛒 ${p.shopName}: ${p.brand || "—"} - ${p.price}₽ \n`)
                     .join(" ");
-                // messages += `\n🔍 Найдено: \n ${foundDetails}`;
+                messages += `\n🔍 Найдено: \n ${foundDetails}`;
             }
         }
         catch {

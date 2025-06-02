@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextHandler = void 0;
 const common_1 = require("@nestjs/common");
+const manu_1 = require("../utils/manu");
 const users_service_1 = require("../authorization/users.service");
 const stock_service_1 = require("../../stock/stock.service");
 const validator_1 = require("../utils/validator");
@@ -75,7 +76,56 @@ let TextHandler = class TextHandler {
                 await ctx.reply("❌ Произошла ошибка при получении информации о товаре. Попробуйте снова позже.");
             }
             ctx.session.step = undefined;
-            console.log(performance.now() - start, "----verjnakan text------");
+            await ctx.reply("📄 Отправьте текст или Excel-файл, и мы его обработаем.\n\n" +
+                "📌 Также можете отправить вручную в одном из следующих форматов:\n\n" +
+                "✅ Полный формат: 12345, 1, CAT\n" +
+                "✅ Без бренда: 12345, 1\n" +
+                "✅ Без количества: 12345, CAT\n" +
+                "✅ Только артикул: 12345\n\n" +
+                "🔁 Порядок: артикул, количество, бренд\n" +
+                "❗️ Разделяйте значения запятой и соблюдайте порядок.");
+        }
+        else if (ctx.session.step == "add_user") {
+            const message = ctx.message;
+            const textMessage = message?.text?.trim();
+            if (!textMessage) {
+                await ctx.reply("❌ Пожалуйста, введите ID пользователя.");
+                return;
+            }
+            await this.usersService.addUser({
+                telegramUsername: textMessage,
+            });
+            await ctx.reply("✅ Пользователь добавлен в базу данных.");
+            ctx.session.step = undefined;
+            await ctx.reply("Пожалуйста, выберите, что вы хотите сделать:\n— ✍️ Написать сообщение пользователю\n— 📎 Отправить файл пользователю\n— 👥 Работать с несколькими пользователями", {
+                parse_mode: "MarkdownV2",
+                ...(await (0, manu_1.getMainMenuKeyboard)(ctx.from?.username || "", this.usersService)),
+            });
+            await ctx.reply("📄 Отправьте текст или Excel-файл, и мы его обработаем.\n\n" +
+                "📌 Также можете отправить вручную в одном из следующих форматов:\n\n" +
+                "✅ Полный формат: 12345, 1, CAT\n" +
+                "✅ Без бренда: 12345, 1\n" +
+                "✅ Без количества: 12345, CAT\n" +
+                "✅ Только артикул: 12345\n\n" +
+                "🔁 Порядок: артикул, количество, бренд\n" +
+                "❗️ Разделяйте значения запятой и соблюдайте порядок.");
+        }
+        else if (ctx.session.step === "delete_user") {
+            const message = ctx.message;
+            const textMessage = message?.text?.trim();
+            if (!textMessage) {
+                await ctx.reply("❌ Пожалуйста, введите ID пользователя.");
+                return;
+            }
+            const resultOfDelate = await this.usersService.deleteUser({
+                telegramUsername: textMessage,
+            });
+            await ctx.reply(resultOfDelate);
+            ctx.session.step = undefined;
+            await ctx.reply("Пожалуйста, выберите, что вы хотите сделать:\n— ✍️ Написать сообщение пользователю\n— 📎 Отправить файл пользователю\n— 👥 Работать с несколькими пользователями", {
+                parse_mode: "MarkdownV2",
+                ...(await (0, manu_1.getMainMenuKeyboard)(ctx.from?.username || "", this.usersService)),
+            });
             await ctx.reply("📄 Отправьте текст или Excel-файл, и мы его обработаем.\n\n" +
                 "📌 Также можете отправить вручную в одном из следующих форматов:\n\n" +
                 "✅ Полный формат: 12345, 1, CAT\n" +

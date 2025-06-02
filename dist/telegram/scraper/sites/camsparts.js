@@ -66,7 +66,6 @@ async function scrapeCamsParts(productNumbers) {
             });
         }
         finally {
-            console.log(results);
             console.log(`Search time for "${productNumbers[0]} in camsparts":`, performance.now() - start);
         }
     }

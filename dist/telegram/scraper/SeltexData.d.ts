@@ -9,6 +9,6 @@ type ProductData = {
     'stock mpb'?: string;
     articul?: string;
 };
-declare const productsByArticle: Record<string, ProductData>;
-export declare function findProductBySeltex(article: string): ProductData | null;
+declare const productsByArticle: Record<string, ProductData[]>;
+export declare function findProductsBySeltex(article: string): ProductData[];
 export { productsByArticle };

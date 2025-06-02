@@ -1,6 +1,6 @@
 import { ScrapedProduct } from 'src/types/context.interface';
 import { SOURCE_WEBPAGE_KEYS } from 'src/constants/constants';
-import { findProductBySeltex } from '../SeltexData';
+import { findProductsBySeltex } from '../SeltexData';
 
 export function scrapeSeltex(
   productNumbers: string[],
@@ -16,20 +16,28 @@ export function scrapeSeltex(
     };
 
     // Ищем строку с артикулом в Excel (приводим к строке и обрезаем пробелы)
-    const product = findProductBySeltex(name);
+    const products = findProductsBySeltex(name);
+    for (const product of products) {
+      console.log('Seltex Nadasdnasn', product);
 
-    if (product) {
-      result.found = true;
-      result.name = product.name || '-';
-      // Если цена в строке как строка, пробуем преобразовать в число
-      result.price = product.price || '-';
-      result.brand =
-        product.brand && product.brand?.length > 1
-          ? product.brand
-          : 'нет бренда';
+      if (product.price) {
+        const result: ScrapedProduct = {
+          shop: SOURCE_WEBPAGE_KEYS.seltex,
+          found: true,
+          name: product.articul || '-',
+          price: product.price || '-',
+          brand:
+            product.brand && product.brand?.length > 1
+              ? product.brand
+              : 'нет бренда',
+        };
+        results.push(result);
+        console.log('Seltex Res Nadasdnasn', result);
+      }
     }
-
-    results.push(result);
+    if (!results.length) {
+      results.push(result);
+    }
   }
 
   return Promise.resolve(results);

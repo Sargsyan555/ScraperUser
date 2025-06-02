@@ -3,25 +3,48 @@ import { Context } from "src/types/context.interface";
 import { StartHandler } from "./handlers/start.handler";
 import { TextHandler } from "./handlers/text.handler";
 import { HelpHandler } from "./handlers/help.handler";
-import { HttpService } from "@nestjs/axios";
 import { DocumentHandler } from "./handlers/document.handler";
 import { UsersService } from "./authorization/users.service";
 import { UserHandler } from "./handlers/user.handleer";
+import { ExcelCacheLoaderService } from "./cache/cache.service";
+import { ScraperCamspartService } from "./exel/camsarts";
+type ProductData = {
+    title: string;
+    price: number;
+    stock?: string | number;
+    brand?: string;
+};
+type ExcelData = {
+    Seltex: Record<string, ProductData[]>;
+    SeventyFour: Record<string, ProductData[]>;
+    IstkDeutz: Record<string, ProductData[]>;
+    Voltag: Record<string, ProductData[]>;
+    Shtren: Record<string, ProductData[]>;
+    UdtTexnika: Record<string, ProductData[]>;
+    Camspart: Record<string, ProductData[]>;
+    Dvpt: Record<string, ProductData[]>;
+    Pcagroup: Record<string, ProductData[]>;
+    Imachinery: Record<string, ProductData[]>;
+};
 export declare class TelegramService {
     private readonly bot;
-    private readonly httpService;
     private readonly startHandler;
     private readonly textHandler;
     private readonly helpHandler;
     private readonly documentHandler;
     private readonly userHandler;
     private readonly usersService;
-    constructor(bot: Telegraf<Context>, httpService: HttpService, startHandler: StartHandler, textHandler: TextHandler, helpHandler: HelpHandler, documentHandler: DocumentHandler, userHandler: UserHandler, usersService: UsersService);
+    private readonly camspart;
+    private readonly excelCacheLoaderService;
+    constructor(bot: Telegraf<Context>, startHandler: StartHandler, textHandler: TextHandler, helpHandler: HelpHandler, documentHandler: DocumentHandler, userHandler: UserHandler, usersService: UsersService, camspart: ScraperCamspartService, excelCacheLoaderService: ExcelCacheLoaderService);
     onStart(ctx: Context): Promise<void>;
     onHelp(ctx: Context): Promise<void>;
     onMessage(ctx: Context): Promise<void>;
     onTemplateExcelDownload(ctx: Context): Promise<void>;
-    onAddUser(ctx: Context): Promise<void>;
-    onDeleteUser(ctx: Context): Promise<void>;
-    onAllUsers(ctx: Context): Promise<void>;
+    onScrapPages(ctx: Context): Promise<void>;
 }
+export declare function getLowestPriceProduct(data: Record<keyof ExcelData, ProductData[]>): {
+    shop: keyof ExcelData;
+    product: ProductData;
+} | null;
+export {};

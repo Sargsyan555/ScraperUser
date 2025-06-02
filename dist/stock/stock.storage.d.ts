@@ -1,4 +1,4 @@
-import { ParsedRow } from 'src/telegram/exel/exel.types';
+import { ParsedRow } from "src/telegram/exel/exel.types";
 export declare class StockStorage {
     private stockData;
     getData(): ParsedRow[];

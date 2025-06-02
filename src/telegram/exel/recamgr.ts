@@ -87,7 +87,6 @@ export class ScraperRecamgrService {
         console.warn(`Failed to scrape: ${url}`);
       }
     }
-    console.log(products);
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Products');

@@ -13,7 +13,7 @@ type ProductData = {
   stock: string | number;
 };
 
-const productsByArticul: Record<string, ProductData> = {};
+const productsByArticul: Record<string, ProductData[]> = {};
 
 function loadExcelData() {
   const workbook = XLSX.readFile('src/telegram/scraper/istk-deutzZ.xlsx');
@@ -24,7 +24,8 @@ function loadExcelData() {
   for (const row of sheetData) {
     if (row.articul) {
       const key = String(row.articul).trim();
-      productsByArticul[key] = {
+
+      const product: ProductData = {
         title: row.title || '-',
         price:
           typeof row.price === 'string'
@@ -32,6 +33,12 @@ function loadExcelData() {
             : row.price || 0,
         stock: row.stock || '-',
       };
+
+      if (!productsByArticul[key]) {
+        productsByArticul[key] = [];
+      }
+
+      productsByArticul[key].push(product);
     }
   }
 }
@@ -39,9 +46,9 @@ function loadExcelData() {
 loadExcelData();
 console.log('istd Exel db is Done ');
 
-export function findProductByistkDeutz(articul: string): ProductData | null {
+export function findProductsByistkDeutz(articul: string): ProductData[] {
   const key = articul.trim();
-  return productsByArticul[key] || null;
+  return productsByArticul[key] || [];
 }
 
 export { productsByArticul };

@@ -24,17 +24,20 @@ let StockService = class StockService {
     }
     async updateStock() {
         try {
-            const skladItems = await (0, readExcelFromYandexDisk_1.readExcelFromYandexDisk)('https://disk.yandex.ru/i/FE5LjEWujhR0Xg');
+            const skladItems = await (0, readExcelFromYandexDisk_1.readExcelFromYandexDisk)("https://disk.yandex.ru/i/FE5LjEWujhR0Xg");
             this.stockStorage.setData(skladItems);
         }
         catch (error) {
-            console.error('[StockService] Ошибка обновления склада:', error.message);
+            console.error("[StockService] Ошибка обновления склада:", error.message);
         }
     }
     getStock() {
         const data = this.stockStorage.getData();
         if (data instanceof Error) {
             throw data;
+        }
+        if (data.length > 0) {
+            console.log("Sklad is done  🚀");
         }
         return data;
     }

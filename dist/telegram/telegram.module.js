@@ -31,6 +31,8 @@ const imachinery_1 = require("./exel/imachinery");
 const pcagroup_1 = require("./exel/pcagroup");
 const camsarts_1 = require("./exel/camsarts");
 const intertrek_1 = require("./exel/intertrek");
+const seltex_service_1 = require("./cache/seltex.service");
+const cache_service_1 = require("./cache/cache.service");
 let TelegramModule = class TelegramModule {
 };
 exports.TelegramModule = TelegramModule;
@@ -40,7 +42,7 @@ exports.TelegramModule = TelegramModule = __decorate([
             stock_module_1.StockModule,
             nestjs_telegraf_1.TelegrafModule.forRootAsync({
                 useFactory: () => ({
-                    token: "7720246807:AAEWSZ63-s2m8bhOIhlN2hsy6NkuWAkM6Dg",
+                    token: "7080107656:AAEnyCl5SAt7EyvFSI-wR8z-V4bByx98VDg",
                     middlewares: [(0, telegraf_1.session)()],
                 }),
             }),
@@ -66,6 +68,8 @@ exports.TelegramModule = TelegramModule = __decorate([
             pcagroup_1.ScraperPcaGroupService,
             camsarts_1.ScraperCamspartService,
             intertrek_1.CrawlerService,
+            seltex_service_1.SeltexService,
+            cache_service_1.ExcelCacheLoaderService,
         ],
     })
 ], TelegramModule);

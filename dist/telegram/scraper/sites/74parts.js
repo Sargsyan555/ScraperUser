@@ -6,19 +6,24 @@ const _74PartsData_1 = require("../74PartsData");
 function scrape74Parts(productNumbers) {
     const results = [];
     for (const name of productNumbers) {
-        const result = {
-            shop: constants_1.SOURCE_WEBPAGE_KEYS.parts74,
-            found: false,
-        };
-        const product = (0, _74PartsData_1.findProductBy74Part)(name);
-        if (product) {
-            result.found = true;
-            result.name = product.title || '-';
-            result.price = product.price || '-';
-            result.brand =
-                (product.title && extractBrand(product.title)) || 'нет бренда';
+        const products = (0, _74PartsData_1.findProductsBy74Part)(name);
+        if (products.length > 0) {
+            for (const product of products) {
+                results.push({
+                    shop: constants_1.SOURCE_WEBPAGE_KEYS.parts74,
+                    found: true,
+                    name: product.title || '-',
+                    price: product.price || '-',
+                    brand: (product.title && extractBrand(product.title)) || 'нет бренда',
+                });
+            }
         }
-        results.push(result);
+        else {
+            results.push({
+                shop: constants_1.SOURCE_WEBPAGE_KEYS.parts74,
+                found: false,
+            });
+        }
     }
     return Promise.resolve(results);
 }

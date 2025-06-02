@@ -6,18 +6,24 @@ const ShtrenData_1 = require("../ShtrenData");
 function scrapeShtren(productNumbers) {
     const results = [];
     for (const name of productNumbers) {
-        const result = {
-            shop: constants_1.SOURCE_WEBPAGE_KEYS.shtern,
-            found: false,
-        };
-        const product = (0, ShtrenData_1.findProductByShtren)(name);
-        if (product) {
-            result.found = true;
-            result.name = product.Name || '-';
-            result.price = product.Price || '-';
-            result.brand = product.Brand || 'нет бренда';
+        const products = (0, ShtrenData_1.findProductsByShtren)(name.trim());
+        if (products.length > 0) {
+            for (const product of products) {
+                results.push({
+                    shop: constants_1.SOURCE_WEBPAGE_KEYS.shtern,
+                    found: true,
+                    name: product.Name || '-',
+                    price: product.Price || '-',
+                    brand: product.Brand || 'нет бренда',
+                });
+            }
         }
-        results.push(result);
+        else {
+            results.push({
+                shop: constants_1.SOURCE_WEBPAGE_KEYS.shtern,
+                found: false,
+            });
+        }
     }
     return Promise.resolve(results);
 }

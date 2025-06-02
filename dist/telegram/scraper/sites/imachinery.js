@@ -85,7 +85,6 @@ async function scrapeIMachinery(productNumbers) {
             return { shop: constants_1.SOURCE_WEBPAGE_KEYS.imachinery, found: false };
         }
     });
-    console.log(res);
     console.log(`Search time for "${productNumbers[0]} in imachinery":`, performance.now() - start);
     return res;
 }

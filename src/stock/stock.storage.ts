@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { ParsedRow } from 'src/telegram/exel/exel.types';
+import { Injectable } from "@nestjs/common";
+import { ParsedRow } from "src/telegram/exel/exel.types";
 
 @Injectable()
 export class StockStorage {
