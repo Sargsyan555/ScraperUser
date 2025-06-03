@@ -79,7 +79,6 @@ let TelegramService = class TelegramService {
                 await ctx.reply("❌ Пожалуйста, отправьте текстовое сообщение.");
                 return;
             }
-            console.log("esiaaaa anummmmm");
             const parts = textMessage.split(",").map((part) => part.trim());
             let artikul = "";
             let qtyStr = "1";
@@ -119,6 +118,7 @@ let TelegramService = class TelegramService {
             const article = articul;
             const data = this.excelCacheLoaderService.getExcelData();
             const combinedDataBySource = {
+                Sklad: data.Sklad[article] || [],
                 Seltex: data.Seltex[article] || [],
                 SeventyFour: data.SeventyFour[article] || [],
                 IstkDeutz: data.IstkDeutz[article] || [],
@@ -131,6 +131,7 @@ let TelegramService = class TelegramService {
                 Imachinery: data.Imachinery[article] || [],
             };
             const validPriceData = filterValidPriceProducts(combinedDataBySource);
+            console.log("val = ", validPriceData);
             let lowestPrice = null;
             let resultToTelegram = "";
             console.error(brand);

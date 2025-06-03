@@ -15,6 +15,7 @@ type ProductData = {
     brand?: string;
 };
 type ExcelData = {
+    Sklad: Record<string, ProductData[]>;
     Seltex: Record<string, ProductData[]>;
     SeventyFour: Record<string, ProductData[]>;
     IstkDeutz: Record<string, ProductData[]>;
@@ -43,7 +44,7 @@ export declare class TelegramService {
     onTemplateExcelDownload(ctx: Context): Promise<void>;
     onScrapPages(ctx: Context): Promise<void>;
 }
-export declare function getLowestPriceProduct(data: Record<keyof ExcelData, ProductData[]>): {
+export declare function getLowestPriceProduct(data: Record<keyof any, ProductData[]>): {
     shop: keyof ExcelData;
     product: ProductData;
 } | null;

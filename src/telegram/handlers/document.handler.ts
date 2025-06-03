@@ -11,6 +11,7 @@ import { ExcelCacheLoaderService } from "../cache/cache.service";
 import { normalizeInput } from "../utils/validator";
 import { getLowestPriceProduct } from "../telegram.service";
 type ExcelData = {
+  Sklad: Record<string, ProductData[]>;
   Seltex: Record<string, ProductData[]>;
   SeventyFour: Record<string, ProductData[]>;
   IstkDeutz: Record<string, ProductData[]>;
@@ -87,6 +88,7 @@ export class DocumentHandler {
         const data: ExcelData = this.excelCacheLoaderService.getExcelData();
 
         let combinedDataBySource: Record<keyof ExcelData, ProductData[]> = {
+          Sklad: data.Sklad[article] || [],
           Seltex: data.Seltex[article] || [],
           SeventyFour: data.SeventyFour[article] || [],
           IstkDeutz: data.IstkDeutz[article] || [],

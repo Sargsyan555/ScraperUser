@@ -31,6 +31,7 @@ type ProductData = {
 };
 
 type ExcelData = {
+  Sklad: Record<string, ProductData[]>;
   Seltex: Record<string, ProductData[]>;
   SeventyFour: Record<string, ProductData[]>;
   IstkDeutz: Record<string, ProductData[]>;
@@ -92,7 +93,6 @@ export class TelegramService {
         await ctx.reply("❌ Пожалуйста, отправьте текстовое сообщение.");
         return;
       }
-      console.log("esiaaaa anummmmm");
 
       const parts = textMessage.split(",").map((part) => part.trim());
 
@@ -141,6 +141,7 @@ export class TelegramService {
       const data: ExcelData = this.excelCacheLoaderService.getExcelData();
 
       const combinedDataBySource: Record<keyof ExcelData, ProductData[]> = {
+        Sklad: data.Sklad[article] || [],
         Seltex: data.Seltex[article] || [],
         SeventyFour: data.SeventyFour[article] || [],
         IstkDeutz: data.IstkDeutz[article] || [],
@@ -153,6 +154,7 @@ export class TelegramService {
         Imachinery: data.Imachinery[article] || [],
       };
       const validPriceData = filterValidPriceProducts(combinedDataBySource);
+      console.log("val = ", validPriceData);
 
       // const { matchedBrand, notMatchedBrand } =
       //   filterProductsByBrand(validPriceData);
@@ -324,7 +326,7 @@ function filterValidPriceProducts(
   return result;
 }
 export function getLowestPriceProduct(
-  data: Record<keyof ExcelData, ProductData[]>
+  data: Record<keyof any, ProductData[]>
 ): { shop: keyof ExcelData; product: ProductData } | null {
   let bestProduct: ProductData | null = null;
   let bestShop: keyof ExcelData | null = null;
