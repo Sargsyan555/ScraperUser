@@ -57,6 +57,7 @@ let DocumentHandler = class DocumentHandler {
                 const data = this.excelCacheLoaderService.getExcelData();
                 let combinedDataBySource = {
                     Sklad: data.Sklad[article] || [],
+                    Solid: data.Solid[article] || [],
                     Seltex: data.Seltex[article] || [],
                     SeventyFour: data.SeventyFour[article] || [],
                     IstkDeutz: data.IstkDeutz[article] || [],

@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { readExcelFromYandexDisk } from "src/stock/readExcelFromYandexDisk";
-import { StockService } from "src/stock/stock.service";
 import * as XLSX from "xlsx";
 
 type ProductData = {
@@ -24,6 +23,14 @@ type SeltexRow = {
   stock?: string | number;
   "stock msk"?: string;
   "stock mpb"?: string;
+};
+
+type SolidRow = {
+  Article: string;
+  Name: string;
+  Price: string;
+  Brand: string;
+  availability: string;
 };
 
 type SeventyFourRow = {
@@ -83,6 +90,7 @@ type IstkDeutzRow = {
 // };
 type ExcelDataMap = {
   Sklad: Record<string, ProductData[]>;
+  Solid: Record<string, ProductData[]>;
   Seltex: Record<string, ProductData[]>;
   SeventyFour: Record<string, ProductData[]>;
   IstkDeutz: Record<string, ProductData[]>;
@@ -99,6 +107,7 @@ type ExcelDataMap = {
 export class ExcelCacheLoaderService implements OnModuleInit {
   private data: ExcelDataMap = {
     Sklad: {},
+    Solid: {},
     Seltex: {},
     SeventyFour: {},
     IstkDeutz: {},
@@ -113,6 +122,7 @@ export class ExcelCacheLoaderService implements OnModuleInit {
 
   onModuleInit() {
     this.loadSklad();
+    this.loadSolid();
     this.loadSeltex();
     this.loadSeventyFour();
     this.loadIstkDeutz();
@@ -153,6 +163,32 @@ export class ExcelCacheLoaderService implements OnModuleInit {
     }
 
     console.log("✅ Sklad loaded");
+  }
+
+  private loadSolid() {
+    const workbook = XLSX.readFile("src/telegram/scraper/solid.xlsx");
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows: SolidRow[] = XLSX.utils.sheet_to_json(sheet);
+
+    for (const row of rows) {
+      const key = row.Article?.trim();
+      if (!key) continue;
+
+      const product: ProductData = {
+        title: row.Name || "-",
+        price:
+          typeof row.Price === "string"
+            ? parseInt(row.Price.replace(/[^\d]/g, ""), 10) || 0
+            : row.Price || 0,
+        stock: row.availability || "-",
+        brand: row.Brand || "-",
+      };
+
+      if (!this.data.Solid[key]) this.data.Solid[key] = [];
+      this.data.Solid[key].push(product);
+    }
+
+    console.log(this.data.Solid, "✅ Solid loaded");
   }
 
   private loadShtren() {

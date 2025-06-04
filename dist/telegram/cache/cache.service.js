@@ -13,6 +13,7 @@ const XLSX = require("xlsx");
 let ExcelCacheLoaderService = class ExcelCacheLoaderService {
     data = {
         Sklad: {},
+        Solid: {},
         Seltex: {},
         SeventyFour: {},
         IstkDeutz: {},
@@ -26,6 +27,7 @@ let ExcelCacheLoaderService = class ExcelCacheLoaderService {
     };
     onModuleInit() {
         this.loadSklad();
+        this.loadSolid();
         this.loadSeltex();
         this.loadSeventyFour();
         this.loadIstkDeutz();
@@ -57,6 +59,28 @@ let ExcelCacheLoaderService = class ExcelCacheLoaderService {
             this.data.Sklad[key].push(product);
         }
         console.log("✅ Sklad loaded");
+    }
+    loadSolid() {
+        const workbook = XLSX.readFile("src/telegram/scraper/solid.xlsx");
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet);
+        for (const row of rows) {
+            const key = row.Article?.trim();
+            if (!key)
+                continue;
+            const product = {
+                title: row.Name || "-",
+                price: typeof row.Price === "string"
+                    ? parseInt(row.Price.replace(/[^\d]/g, ""), 10) || 0
+                    : row.Price || 0,
+                stock: row.availability || "-",
+                brand: row.Brand || "-",
+            };
+            if (!this.data.Solid[key])
+                this.data.Solid[key] = [];
+            this.data.Solid[key].push(product);
+        }
+        console.log(this.data.Solid, "✅ Solid loaded");
     }
     loadShtren() {
         const workbook = XLSX.readFile("src/telegram/scraper/shtren.xlsx");

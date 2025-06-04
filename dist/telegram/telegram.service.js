@@ -119,6 +119,7 @@ let TelegramService = class TelegramService {
             const data = this.excelCacheLoaderService.getExcelData();
             const combinedDataBySource = {
                 Sklad: data.Sklad[article] || [],
+                Solid: data.Solid[article] || [],
                 Seltex: data.Seltex[article] || [],
                 SeventyFour: data.SeventyFour[article] || [],
                 IstkDeutz: data.IstkDeutz[article] || [],

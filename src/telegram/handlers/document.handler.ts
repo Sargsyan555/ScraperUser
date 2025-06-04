@@ -12,6 +12,7 @@ import { normalizeInput } from "../utils/validator";
 import { getLowestPriceProduct } from "../telegram.service";
 type ExcelData = {
   Sklad: Record<string, ProductData[]>;
+  Solid: Record<string, ProductData[]>;
   Seltex: Record<string, ProductData[]>;
   SeventyFour: Record<string, ProductData[]>;
   IstkDeutz: Record<string, ProductData[]>;
@@ -89,6 +90,7 @@ export class DocumentHandler {
 
         let combinedDataBySource: Record<keyof ExcelData, ProductData[]> = {
           Sklad: data.Sklad[article] || [],
+          Solid: data.Solid[article] || [],
           Seltex: data.Seltex[article] || [],
           SeventyFour: data.SeventyFour[article] || [],
           IstkDeutz: data.IstkDeutz[article] || [],

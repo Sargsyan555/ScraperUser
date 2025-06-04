@@ -7,6 +7,7 @@ type ProductData = {
 };
 type ExcelDataMap = {
     Sklad: Record<string, ProductData[]>;
+    Solid: Record<string, ProductData[]>;
     Seltex: Record<string, ProductData[]>;
     SeventyFour: Record<string, ProductData[]>;
     IstkDeutz: Record<string, ProductData[]>;
@@ -22,6 +23,7 @@ export declare class ExcelCacheLoaderService implements OnModuleInit {
     private data;
     onModuleInit(): void;
     private loadSklad;
+    private loadSolid;
     private loadShtren;
     private loadSeltex;
     private loadSeventyFour;
