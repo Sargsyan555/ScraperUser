@@ -112,6 +112,18 @@ export class DocumentHandler {
           luchshayaCena: lowestPrice,
           summa: total,
           luchshiyPostavshik: best?.shop,
+          sklad: combinedDataBySource.Sklad,
+          "solid-t": combinedDataBySource.Solid,
+          "74parts": combinedDataBySource.SeventyFour,
+          pcagroup: combinedDataBySource.Pcagroup,
+          "spb.camsparts": combinedDataBySource.Camspart,
+          shtern: combinedDataBySource.Shtren,
+          "istk-deutz": combinedDataBySource.IstkDeutz,
+          dvpt: combinedDataBySource.Dvpt,
+          voltag: combinedDataBySource.Voltag,
+          udtTechnika: combinedDataBySource.UdtTexnika,
+          seltex: combinedDataBySource.Seltex,
+          imachinery: combinedDataBySource.Imachinery,
         });
       });
       console.log(finalResult);

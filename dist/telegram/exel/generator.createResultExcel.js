@@ -11,6 +11,20 @@ function createResultExcelBuffer(rows) {
         "лучшая цена",
         "сумма",
         "лучший поставщик",
+        "sklad",
+        "seltex",
+        "solid-t",
+        "imachinery",
+        "74parts",
+        "b2b.ixora-auto",
+        "vip.blumaq",
+        "pcagroup",
+        "spb.camsparts",
+        "voltag",
+        "dv-pt",
+        "istk-deutz",
+        "shtern",
+        "udtTechnika",
     ];
     const data = rows.map((row) => {
         return [
@@ -19,6 +33,21 @@ function createResultExcelBuffer(rows) {
             row.luchshayaCena,
             row.summa,
             row.luchshiyPostavshik,
+            formatSuppliers(row.sklad),
+            formatSuppliers(row.seltex),
+            formatSuppliers(row["solid-t"]),
+            formatSuppliers(row.imachinery),
+            formatSuppliers(row["74parts"]),
+            formatSuppliers(row["b2b.ixora-auto"]),
+            formatSuppliers(row["vip.blumaq"]),
+            formatSuppliers(row["solid-t"]),
+            formatSuppliers(row.pcagroup),
+            formatSuppliers(row["spb.camsparts"]),
+            formatSuppliers(row.voltag),
+            formatSuppliers(row["dv-pt"]),
+            formatSuppliers(row["istk-deutz"]),
+            formatSuppliers(row.shtern),
+            formatSuppliers(row.udtTechnika),
         ];
     });
     const sheetData = [headers, ...data];
@@ -32,5 +61,25 @@ function createResultExcelBuffer(rows) {
     const filePath = path.join(outputDir, `report-${Date.now()}.xlsx`);
     XLSX.writeFile(workbook, filePath);
     return filePath;
+}
+function formatSuppliers(value) {
+    if (Array.isArray(value)) {
+        if (value.length === 0)
+            return "";
+        if (typeof value[0] === "object" && value[0] !== null) {
+            return value
+                .map((entry) => {
+                const brand = entry.brand ? `${entry.brand}` : "NoBrand";
+                const price = entry.price ?? "-";
+                return `${brand}: ${price}₽`;
+            })
+                .join(" || ");
+        }
+        if (value.length === 2) {
+            return value.join(", ");
+        }
+        return String(value);
+    }
+    return String(value ?? "");
 }
 //# sourceMappingURL=generator.createResultExcel.js.map

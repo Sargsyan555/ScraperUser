@@ -45,4 +45,16 @@ export type ResultRowTest = {
     luchshayaCena: number | string;
     summa: number;
     luchshiyPostavshik: string | undefined;
+    sklad: any[];
+    seltex: any[];
+    "solid-t": any[];
+    "74parts": any[];
+    pcagroup: any[];
+    "spb.camsparts": any[];
+    dvpt: any[];
+    "istk-deutz": any[];
+    shtern: any[];
+    voltag: any[];
+    udtTechnika: any[];
+    imachinery: any[];
 };
