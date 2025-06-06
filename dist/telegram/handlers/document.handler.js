@@ -15,17 +15,14 @@ const parse_and_read_1 = require("../exel/parse.and.read");
 const generator_createResultExcel_1 = require("../exel/generator.createResultExcel");
 const manu_1 = require("../utils/manu");
 const users_service_1 = require("../authorization/users.service");
-const stock_service_1 = require("../../stock/stock.service");
 const cache_service_1 = require("../cache/cache.service");
 const validator_1 = require("../utils/validator");
 const telegram_service_1 = require("../telegram.service");
 let DocumentHandler = class DocumentHandler {
     userService;
-    stockService;
     excelCacheLoaderService;
-    constructor(userService, stockService, excelCacheLoaderService) {
+    constructor(userService, excelCacheLoaderService) {
         this.userService = userService;
-        this.stockService = stockService;
         this.excelCacheLoaderService = excelCacheLoaderService;
     }
     async handle(ctx) {
@@ -45,8 +42,6 @@ let DocumentHandler = class DocumentHandler {
             if (!inputItems.length) {
                 return ctx.reply("Ваш файл Excel пустой.");
             }
-            const skladItems = this.stockService.getStock();
-            console.log(skladItems.length > 0 ? "sklad is done !" : "sklad dont loaded");
             await ctx.reply("🌐 Идёт поиск по сайтам поставщиков. Пожалуйста, подождите...");
             const finalResult = [];
             console.log(inputItems);
@@ -68,6 +63,9 @@ let DocumentHandler = class DocumentHandler {
                     Dvpt: data.Dvpt[article] || [],
                     Pcagroup: data.Pcagroup[article] || [],
                     Imachinery: data.Imachinery[article] || [],
+                    Zipteh: data.Zipteh[article] || [],
+                    Ixora: data.Ixora[article] || [],
+                    Recamgr: data.Recamgr[article] || [],
                 };
                 combinedDataBySource = filterValidPriceProducts(combinedDataBySource);
                 const best = (0, telegram_service_1.getLowestPriceProduct)(combinedDataBySource);
@@ -91,6 +89,10 @@ let DocumentHandler = class DocumentHandler {
                     udtTechnika: combinedDataBySource.UdtTexnika,
                     seltex: combinedDataBySource.Seltex,
                     imachinery: combinedDataBySource.Imachinery,
+                    zipteh: combinedDataBySource.Zipteh,
+                    ixora: combinedDataBySource.Ixora,
+                    recamgr: combinedDataBySource.Recamgr,
+                    "74Part": combinedDataBySource["74Part"],
                 });
             });
             console.log(finalResult);
@@ -118,7 +120,6 @@ exports.DocumentHandler = DocumentHandler;
 exports.DocumentHandler = DocumentHandler = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        stock_service_1.StockService,
         cache_service_1.ExcelCacheLoaderService])
 ], DocumentHandler);
 function filterValidPriceProducts(dataBySource) {

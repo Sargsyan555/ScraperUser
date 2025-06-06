@@ -7,7 +7,6 @@ import { DocumentHandler } from "./handlers/document.handler";
 import { UsersService } from "./authorization/users.service";
 import { UserHandler } from "./handlers/user.handleer";
 import { ExcelCacheLoaderService } from "./cache/cache.service";
-import { ScraperCamspartService } from "./exel/camsarts";
 type ProductData = {
     title: string;
     price: number;
@@ -36,14 +35,12 @@ export declare class TelegramService {
     private readonly documentHandler;
     private readonly userHandler;
     private readonly usersService;
-    private readonly camspart;
     private readonly excelCacheLoaderService;
-    constructor(bot: Telegraf<Context>, startHandler: StartHandler, textHandler: TextHandler, helpHandler: HelpHandler, documentHandler: DocumentHandler, userHandler: UserHandler, usersService: UsersService, camspart: ScraperCamspartService, excelCacheLoaderService: ExcelCacheLoaderService);
+    constructor(bot: Telegraf<Context>, startHandler: StartHandler, textHandler: TextHandler, helpHandler: HelpHandler, documentHandler: DocumentHandler, userHandler: UserHandler, usersService: UsersService, excelCacheLoaderService: ExcelCacheLoaderService);
     onStart(ctx: Context): Promise<void>;
     onHelp(ctx: Context): Promise<void>;
     onMessage(ctx: Context): Promise<void>;
     onTemplateExcelDownload(ctx: Context): Promise<void>;
-    onScrapPages(ctx: Context): Promise<void>;
 }
 export declare function getLowestPriceProduct(data: Record<keyof any, ProductData[]>): {
     shop: keyof ExcelData;

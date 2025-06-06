@@ -6,7 +6,6 @@ import { createResultExcelBuffer } from "../exel/generator.createResultExcel";
 import { InputExelFile, ParsedRow, ResultRowTest } from "../exel/exel.types";
 import { getMainMenuKeyboard } from "../utils/manu";
 import { UsersService } from "../authorization/users.service";
-import { StockService } from "src/stock/stock.service";
 import { ExcelCacheLoaderService } from "../cache/cache.service";
 import { normalizeInput } from "../utils/validator";
 import { getLowestPriceProduct } from "../telegram.service";
@@ -23,6 +22,9 @@ type ExcelData = {
   Dvpt: Record<string, ProductData[]>;
   Pcagroup: Record<string, ProductData[]>;
   Imachinery: Record<string, ProductData[]>;
+  Zipteh: Record<string, ProductData[]>;
+  Ixora: Record<string, ProductData[]>;
+  Recamgr: Record<string, ProductData[]>;
 };
 type ProductData = {
   title: string;
@@ -35,7 +37,7 @@ export class DocumentHandler {
   // stockService: ParsedRow[];
   constructor(
     private readonly userService: UsersService,
-    private readonly stockService: StockService,
+    // private readonly stockService: StockService,
     private readonly excelCacheLoaderService: ExcelCacheLoaderService
   ) {}
 
@@ -65,11 +67,11 @@ export class DocumentHandler {
         return ctx.reply("Ваш файл Excel пустой.");
       }
 
-      const skladItems: ParsedRow[] = this.stockService.getStock();
+      // const skladItems: ParsedRow[] = this.stockService.getStock();
 
-      console.log(
-        skladItems.length > 0 ? "sklad is done !" : "sklad dont loaded"
-      );
+      // console.log(
+      //   skladItems.length > 0 ? "sklad is done !" : "sklad dont loaded"
+      // );
 
       await ctx.reply(
         "🌐 Идёт поиск по сайтам поставщиков. Пожалуйста, подождите..."
@@ -101,6 +103,9 @@ export class DocumentHandler {
           Dvpt: data.Dvpt[article] || [],
           Pcagroup: data.Pcagroup[article] || [],
           Imachinery: data.Imachinery[article] || [],
+          Zipteh: data.Zipteh[article] || [],
+          Ixora: data.Ixora[article] || [],
+          Recamgr: data.Recamgr[article] || [],
         };
         combinedDataBySource = filterValidPriceProducts(combinedDataBySource);
         const best = getLowestPriceProduct(combinedDataBySource);
@@ -124,6 +129,10 @@ export class DocumentHandler {
           udtTechnika: combinedDataBySource.UdtTexnika,
           seltex: combinedDataBySource.Seltex,
           imachinery: combinedDataBySource.Imachinery,
+          zipteh: combinedDataBySource.Zipteh,
+          ixora: combinedDataBySource.Ixora,
+          recamgr: combinedDataBySource.Recamgr,
+          "74Part": combinedDataBySource["74Part"],
         });
       });
       console.log(finalResult);

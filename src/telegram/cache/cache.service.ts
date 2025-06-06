@@ -1,12 +1,14 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { readExcelFromYandexDisk } from "src/stock/readExcelFromYandexDisk";
 import * as XLSX from "xlsx";
+import { readExcelFromYandexDisk } from "../utils/readExcelFromYandexDisk";
 
 type ProductData = {
   title: string;
   price: number;
   stock?: string | number;
   brand?: string;
+  articul?: string;
+  artikul?: string;
 };
 type UdtRow = {
   Артикул?: string;
@@ -101,6 +103,9 @@ type ExcelDataMap = {
   Dvpt: Record<string, ProductData[]>;
   Pcagroup: Record<string, ProductData[]>;
   Imachinery: Record<string, ProductData[]>;
+  Zipteh: Record<string, ProductData[]>;
+  Ixora: Record<string, ProductData[]>;
+  Recamgr: Record<string, ProductData[]>;
 };
 
 @Injectable()
@@ -118,6 +123,9 @@ export class ExcelCacheLoaderService implements OnModuleInit {
     Dvpt: {},
     Pcagroup: {},
     Imachinery: {},
+    Zipteh: {},
+    Ixora: {},
+    Recamgr: {},
   };
 
   onModuleInit() {
@@ -133,6 +141,9 @@ export class ExcelCacheLoaderService implements OnModuleInit {
     this.loadDvpt();
     this.loadPcagroup();
     this.loadImachinery();
+    this.loadZipteh();
+    this.loadIxora();
+    this.loadRecamgr();
     console.log("✅ All Excel data loaded and cached.");
   }
 
@@ -165,6 +176,87 @@ export class ExcelCacheLoaderService implements OnModuleInit {
     console.log("✅ Sklad loaded");
   }
 
+  private loadRecamgr() {
+    const workbook = XLSX.readFile("src/telegram/scraper/RecamgrPrice.xlsx");
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows: ProductData[] = XLSX.utils.sheet_to_json(sheet);
+
+    for (const row of rows) {
+      const key = row.articul?.trim();
+      if (!key) continue;
+
+      const priceValue = row.price as string | number;
+
+      const product: ProductData = {
+        title: row.title || "-",
+        price:
+          typeof priceValue === "string"
+            ? parseInt(priceValue.replace(/[^\d]/g, ""), 10) || 0
+            : priceValue || 0,
+        brand: row.brand || "-",
+      };
+
+      if (!this.data.Recamgr[key]) this.data.Recamgr[key] = [];
+      this.data.Recamgr[key].push(product);
+    }
+
+    console.log("✅ RecamgrPrice loaded");
+  }
+
+  private loadIxora() {
+    const workbook = XLSX.readFile("src/telegram/scraper/ixora.xlsx");
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows: ProductData[] = XLSX.utils.sheet_to_json(sheet);
+
+    for (const row of rows) {
+      const key = row.artikul?.trim();
+      if (!key) continue;
+
+      const priceValue = row.price as string | number;
+
+      const product: ProductData = {
+        title: row.title || "-",
+        price:
+          typeof priceValue === "string"
+            ? parseInt(priceValue.replace(/[^\d]/g, ""), 10) || 0
+            : priceValue || 0,
+        brand: row.brand || "-",
+      };
+
+      if (!this.data.Ixora[key]) this.data.Ixora[key] = [];
+      this.data.Ixora[key].push(product);
+    }
+
+    console.log("✅ Ixora loaded");
+  }
+
+  private loadZipteh() {
+    const workbook = XLSX.readFile("src/telegram/scraper/zipteh.xlsx");
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows: ProductData[] = XLSX.utils.sheet_to_json(sheet);
+
+    for (const row of rows) {
+      const key = row.articul?.trim();
+      if (!key) continue;
+
+      const priceValue = row.price as string | number;
+
+      const product: ProductData = {
+        title: row.title || "-",
+        price:
+          typeof priceValue === "string"
+            ? parseInt(priceValue.replace(/[^\d]/g, ""), 10) || 0
+            : priceValue || 0,
+        brand: row.brand || "-",
+      };
+
+      if (!this.data.Zipteh[key]) this.data.Zipteh[key] = [];
+      this.data.Zipteh[key].push(product);
+    }
+
+    console.log("✅ Zipteh loaded");
+  }
+
   private loadSolid() {
     const workbook = XLSX.readFile("src/telegram/scraper/solid.xlsx");
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -188,7 +280,7 @@ export class ExcelCacheLoaderService implements OnModuleInit {
       this.data.Solid[key].push(product);
     }
 
-    console.log(this.data.Solid, "✅ Solid loaded");
+    console.log("✅ Solid loaded");
   }
 
   private loadShtren() {

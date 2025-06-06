@@ -55,7 +55,6 @@ export class TelegramService {
     private readonly documentHandler: DocumentHandler,
     private readonly userHandler: UserHandler,
     private readonly usersService: UsersService, // ✅ inject it
-    private readonly camspart: ScraperCamspartService,
     private readonly excelCacheLoaderService: ExcelCacheLoaderService
   ) {}
   @Start()
@@ -209,32 +208,6 @@ export class TelegramService {
     } catch (error) {
       console.error("Ошибка при отправке шаблона Excel:", error);
       await ctx.reply("❌ Не удалось отправить файл шаблона.");
-    }
-  }
-
-  @Action("scrape_seltex")
-  async onScrapPages(@Ctx() ctx: Context) {
-    try {
-      await ctx.answerCbQuery("Starting to scrape pages...");
-
-      const filepath = await this.camspart.scrapeAndExport();
-      console.log(filepath);
-
-      // await ctx.reply(`✅ Scraped ${products.length} products successfully.`);
-
-      // ✅ Send the Excel file
-      await ctx.replyWithDocument({
-        source: filepath,
-        // filename: 'seltex-products.xlsx',
-      });
-    } catch (error) {
-      console.error("Error during scraping:", error.message);
-
-      try {
-        await ctx.reply("❌ An error occurred during scraping.");
-      } catch (e) {
-        console.error("Failed to send reply:", e.message);
-      }
     }
   }
 }

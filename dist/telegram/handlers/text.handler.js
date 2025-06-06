@@ -13,15 +13,11 @@ exports.TextHandler = void 0;
 const common_1 = require("@nestjs/common");
 const manu_1 = require("../utils/manu");
 const users_service_1 = require("../authorization/users.service");
-const stock_service_1 = require("../../stock/stock.service");
 const validator_1 = require("../utils/validator");
-const comparator_textMsg_1 = require("../textMsg/comparator.textMsg");
 let TextHandler = class TextHandler {
     usersService;
-    stockService;
-    constructor(usersService, stockService) {
+    constructor(usersService) {
         this.usersService = usersService;
-        this.stockService = stockService;
     }
     async handle(ctx) {
         if (ctx.session.step === "single_part_request") {
@@ -65,9 +61,6 @@ let TextHandler = class TextHandler {
             const nameItem = (0, validator_1.normalizeInput)(artikul);
             const checkItem = { name: nameItem, qty, brand };
             try {
-                const skladItems = this.stockService.getStock();
-                const { messages } = await (0, comparator_textMsg_1.compareItemTextHandler)(checkItem, skladItems);
-                await ctx.reply(messages);
                 const durationSec = ((performance.now() - start) / 1000).toFixed(2);
                 await ctx.reply(`⏱ Операция заняла ${durationSec} секунд.`);
             }
@@ -140,7 +133,6 @@ let TextHandler = class TextHandler {
 exports.TextHandler = TextHandler;
 exports.TextHandler = TextHandler = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService,
-        stock_service_1.StockService])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], TextHandler);
 //# sourceMappingURL=text.handler.js.map

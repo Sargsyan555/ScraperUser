@@ -11,23 +11,24 @@ import { UsersService } from "./authorization/users.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { User, UserSchema } from "./authorization/schema/schema";
 import { UserHandler } from "./handlers/user.handleer";
-import { StockModule } from "src/stock/stock.module";
-import { ScraperService } from "./exel/scraperService";
-import { VoltagService } from "./exel/voltag";
-import { TruckdriveService } from "./exel/truckdrive";
-import { ProductScraperService } from "./exel/shtern";
-import { ScraperServiceUdt } from "./exel/udtTexnika";
-import { ScraperRecamgrService } from "./exel/recamgr";
-import { ScraperImachineryService } from "./exel/imachinery";
-import { ScraperPcaGroupService } from "./exel/pcagroup";
-import { ScraperCamspartService } from "./exel/camsarts";
-import { CrawlerService } from "./exel/intertrek";
-import { SeltexService } from "./cache/seltex.service";
 import { ExcelCacheLoaderService } from "./cache/cache.service";
+import { ScheduleModule } from "@nestjs/schedule";
+import { ScraperServiceUdtTechnika } from "./exel/ScraperServiceUdtTechnika";
+import { ScraperServiceVoltag } from "./exel/ScraperServiceVoltag";
+import { ScraperServiceDvPt } from "./exel/scraperServiceDv-Pt";
+import { ScraperImachineryService } from "./exel/ScraperServiceImachinery";
+import { ScraperServiceIstkDeutz } from "./exel/ScraperService-Isdk";
+import { ScraperCamspartService } from "./exel/scraperServiceCamsarts";
+import { ScraperServiceSeltex } from "./exel/scraperServiceSeltex";
+import { ScraperServiceShtren } from "./exel/scraperServiceShtern";
+import { ScraperServicePcagroup } from "./exel/scraperServicePcagroup";
+import { ScraperRecamgrService } from "./exel/ScraperRecamgrService";
+import { ScraperServiceZipteh } from "./exel/ScraperServiceZipteh";
+import { ScraperSolidService } from "./exel/scraperServiceSolid";
+import { ScraperService74Parts } from "./exel/ScraperService74Part";
 
 @Module({
   imports: [
-    StockModule,
     TelegrafModule.forRootAsync({
       useFactory: () => ({
         token: "7080107656:AAEnyCl5SAt7EyvFSI-wR8z-V4bByx98VDg",
@@ -36,9 +37,9 @@ import { ExcelCacheLoaderService } from "./cache/cache.service";
     }),
     HttpModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), // ✅
+    ScheduleModule.forRoot(),
   ],
   providers: [
-    StockModule,
     TelegramService,
     StartHandler,
     HelpHandler,
@@ -46,18 +47,23 @@ import { ExcelCacheLoaderService } from "./cache/cache.service";
     DocumentHandler,
     UserHandler,
     UsersService,
-    VoltagService,
-    ScraperService,
-    TruckdriveService,
-    ProductScraperService,
-    ScraperServiceUdt,
-    ScraperRecamgrService,
-    ScraperImachineryService,
-    ScraperPcaGroupService,
-    ScraperCamspartService,
-    CrawlerService,
-    SeltexService,
     ExcelCacheLoaderService,
+    // StockService, // slkadna mnace
+    // ScraperService74Parts, // ++ done
+    // ScraperServiceIxora, // ++ done
+    // ScraperServiceZipteh, // ++done
+    // ScraperServiceDvPt, // ++done
+    // ScraperServiceUdtTechnika, //++ done
+    // ScraperImachineryService, //++ done
+    // ScraperRecamgrService, // chilnum  interestik.info
+    // ScraperServicePcagroup, //++ done
+    // ScraperCamspartService, //++ done
+    // ScraperServiceIstkDeutz, // ++done
+    // ScraperService74Parts, // -- chilnum xuyewo xi
+    // ScraperServiceShtren, //++ done
+    // ScraperServiceVoltag, //++ done
+    // ScraperSolidService, //++done
+    // ScraperRecamgrService,
   ],
 })
 export class TelegramModule {}

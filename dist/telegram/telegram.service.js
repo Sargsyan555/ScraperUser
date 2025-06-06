@@ -27,7 +27,6 @@ const fs_1 = require("fs");
 const path_1 = require("path");
 const cache_service_1 = require("./cache/cache.service");
 const validator_1 = require("./utils/validator");
-const camsarts_1 = require("./exel/camsarts");
 let TelegramService = class TelegramService {
     bot;
     startHandler;
@@ -36,9 +35,8 @@ let TelegramService = class TelegramService {
     documentHandler;
     userHandler;
     usersService;
-    camspart;
     excelCacheLoaderService;
-    constructor(bot, startHandler, textHandler, helpHandler, documentHandler, userHandler, usersService, camspart, excelCacheLoaderService) {
+    constructor(bot, startHandler, textHandler, helpHandler, documentHandler, userHandler, usersService, excelCacheLoaderService) {
         this.bot = bot;
         this.startHandler = startHandler;
         this.textHandler = textHandler;
@@ -46,7 +44,6 @@ let TelegramService = class TelegramService {
         this.documentHandler = documentHandler;
         this.userHandler = userHandler;
         this.usersService = usersService;
-        this.camspart = camspart;
         this.excelCacheLoaderService = excelCacheLoaderService;
     }
     async onStart(ctx) {
@@ -175,25 +172,6 @@ let TelegramService = class TelegramService {
             await ctx.reply("❌ Не удалось отправить файл шаблона.");
         }
     }
-    async onScrapPages(ctx) {
-        try {
-            await ctx.answerCbQuery("Starting to scrape pages...");
-            const filepath = await this.camspart.scrapeAndExport();
-            console.log(filepath);
-            await ctx.replyWithDocument({
-                source: filepath,
-            });
-        }
-        catch (error) {
-            console.error("Error during scraping:", error.message);
-            try {
-                await ctx.reply("❌ An error occurred during scraping.");
-            }
-            catch (e) {
-                console.error("Failed to send reply:", e.message);
-            }
-        }
-    }
 };
 exports.TelegramService = TelegramService;
 __decorate([
@@ -224,13 +202,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TelegramService.prototype, "onTemplateExcelDownload", null);
-__decorate([
-    (0, nestjs_telegraf_1.Action)("scrape_seltex"),
-    __param(0, (0, nestjs_telegraf_1.Ctx)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], TelegramService.prototype, "onScrapPages", null);
 exports.TelegramService = TelegramService = __decorate([
     (0, common_1.Injectable)(),
     (0, nestjs_telegraf_1.Update)(),
@@ -242,7 +213,6 @@ exports.TelegramService = TelegramService = __decorate([
         document_handler_1.DocumentHandler,
         user_handleer_1.UserHandler,
         users_service_1.UsersService,
-        camsarts_1.ScraperCamspartService,
         cache_service_1.ExcelCacheLoaderService])
 ], TelegramService);
 function filterProductsByBrand(combinedDataBySource, userBrend) {

@@ -4,6 +4,8 @@ type ProductData = {
     price: number;
     stock?: string | number;
     brand?: string;
+    articul?: string;
+    artikul?: string;
 };
 type ExcelDataMap = {
     Sklad: Record<string, ProductData[]>;
@@ -18,11 +20,17 @@ type ExcelDataMap = {
     Dvpt: Record<string, ProductData[]>;
     Pcagroup: Record<string, ProductData[]>;
     Imachinery: Record<string, ProductData[]>;
+    Zipteh: Record<string, ProductData[]>;
+    Ixora: Record<string, ProductData[]>;
+    Recamgr: Record<string, ProductData[]>;
 };
 export declare class ExcelCacheLoaderService implements OnModuleInit {
     private data;
     onModuleInit(): void;
     private loadSklad;
+    private loadRecamgr;
+    private loadIxora;
+    private loadZipteh;
     private loadSolid;
     private loadShtren;
     private loadSeltex;

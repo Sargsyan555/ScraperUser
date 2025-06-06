@@ -20,26 +20,14 @@ const users_service_1 = require("./authorization/users.service");
 const mongoose_1 = require("@nestjs/mongoose");
 const schema_1 = require("./authorization/schema/schema");
 const user_handleer_1 = require("./handlers/user.handleer");
-const stock_module_1 = require("../stock/stock.module");
-const scraperService_1 = require("./exel/scraperService");
-const voltag_1 = require("./exel/voltag");
-const truckdrive_1 = require("./exel/truckdrive");
-const shtern_1 = require("./exel/shtern");
-const udtTexnika_1 = require("./exel/udtTexnika");
-const recamgr_1 = require("./exel/recamgr");
-const imachinery_1 = require("./exel/imachinery");
-const pcagroup_1 = require("./exel/pcagroup");
-const camsarts_1 = require("./exel/camsarts");
-const intertrek_1 = require("./exel/intertrek");
-const seltex_service_1 = require("./cache/seltex.service");
 const cache_service_1 = require("./cache/cache.service");
+const schedule_1 = require("@nestjs/schedule");
 let TelegramModule = class TelegramModule {
 };
 exports.TelegramModule = TelegramModule;
 exports.TelegramModule = TelegramModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            stock_module_1.StockModule,
             nestjs_telegraf_1.TelegrafModule.forRootAsync({
                 useFactory: () => ({
                     token: "7080107656:AAEnyCl5SAt7EyvFSI-wR8z-V4bByx98VDg",
@@ -48,9 +36,9 @@ exports.TelegramModule = TelegramModule = __decorate([
             }),
             axios_1.HttpModule,
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.User.name, schema: schema_1.UserSchema }]),
+            schedule_1.ScheduleModule.forRoot(),
         ],
         providers: [
-            stock_module_1.StockModule,
             telegram_service_1.TelegramService,
             start_handler_1.StartHandler,
             help_handler_1.HelpHandler,
@@ -58,17 +46,6 @@ exports.TelegramModule = TelegramModule = __decorate([
             document_handler_1.DocumentHandler,
             user_handleer_1.UserHandler,
             users_service_1.UsersService,
-            voltag_1.VoltagService,
-            scraperService_1.ScraperService,
-            truckdrive_1.TruckdriveService,
-            shtern_1.ProductScraperService,
-            udtTexnika_1.ScraperServiceUdt,
-            recamgr_1.ScraperRecamgrService,
-            imachinery_1.ScraperImachineryService,
-            pcagroup_1.ScraperPcaGroupService,
-            camsarts_1.ScraperCamspartService,
-            intertrek_1.CrawlerService,
-            seltex_service_1.SeltexService,
             cache_service_1.ExcelCacheLoaderService,
         ],
     })
