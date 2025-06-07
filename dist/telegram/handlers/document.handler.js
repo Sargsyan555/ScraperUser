@@ -92,7 +92,6 @@ let DocumentHandler = class DocumentHandler {
                     zipteh: combinedDataBySource.Zipteh,
                     ixora: combinedDataBySource.Ixora,
                     recamgr: combinedDataBySource.Recamgr,
-                    "74Part": combinedDataBySource["74Part"],
                 });
             });
             console.log(finalResult);

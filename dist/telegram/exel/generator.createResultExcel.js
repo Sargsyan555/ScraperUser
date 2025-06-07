@@ -11,20 +11,6 @@ function createResultExcelBuffer(rows) {
         "лучшая цена",
         "сумма",
         "лучший поставщик",
-        "sklad",
-        "seltex",
-        "solid-t",
-        "imachinery",
-        "74parts",
-        "b2b.ixora-auto",
-        "vip.blumaq",
-        "pcagroup",
-        "spb.camsparts",
-        "voltag",
-        "dv-pt",
-        "istk-deutz",
-        "shtern",
-        "udtTechnika",
     ];
     const data = rows.map((row) => {
         return [
@@ -33,21 +19,6 @@ function createResultExcelBuffer(rows) {
             row.luchshayaCena,
             row.summa,
             row.luchshiyPostavshik,
-            formatSuppliers(row.sklad),
-            formatSuppliers(row.seltex),
-            formatSuppliers(row["solid-t"]),
-            formatSuppliers(row.imachinery),
-            formatSuppliers(row["74parts"]),
-            formatSuppliers(row["b2b.ixora-auto"]),
-            formatSuppliers(row["vip.blumaq"]),
-            formatSuppliers(row["solid-t"]),
-            formatSuppliers(row.pcagroup),
-            formatSuppliers(row["spb.camsparts"]),
-            formatSuppliers(row.voltag),
-            formatSuppliers(row["dv-pt"]),
-            formatSuppliers(row["istk-deutz"]),
-            formatSuppliers(row.shtern),
-            formatSuppliers(row.udtTechnika),
         ];
     });
     const sheetData = [headers, ...data];
