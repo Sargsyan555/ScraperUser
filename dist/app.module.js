@@ -19,7 +19,7 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://eriktoros:210621Er$@bot.jrpaust.mongodb.net/?retryWrites=true&w=majority&appName=bot'),
+            mongoose_1.MongooseModule.forRoot("mongodb+srv://eriktoros:210621Er$@bot.jrpaust.mongodb.net/?retryWrites=true&w=majority&appName=bot"),
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.User.name, schema: schema_1.UserSchema }]),
             telegram_module_1.TelegramModule,
         ],

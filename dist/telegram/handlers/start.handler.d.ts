@@ -1,5 +1,5 @@
-import { Context } from 'src/types/context.interface';
-import { UsersService } from '../authorization/users.service';
+import { Context } from "src/types/context.interface";
+import { UsersService } from "../authorization/users.service";
 export declare class StartHandler {
     private readonly userService;
     private readonly templateLink;
